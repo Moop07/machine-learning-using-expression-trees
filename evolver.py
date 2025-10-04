@@ -40,6 +40,9 @@ def purge_functions(functions):
         output.append(function[0])
     return output
 
+best_function = None
+lowest_difference = 10000
+
 def evolve_functions(generations = 1):
     population = []
     for i in range(500):
@@ -49,12 +52,7 @@ def evolve_functions(generations = 1):
         population = purge_functions(population)
         population = mutate_functions(population)
         print(i)
-    return population[:10]
-
-best_function = None
-lowest_difference = 10000
-
-final_functions = evolve_functions(200)
-print(f"List of surviving functions found, in order of ascending error rate {final_functions}")
-print(f"The best function was {str(best_function)}")
-print(f"With an error rate of{lowest_difference}")
+    final_functions = population[:10]
+    print(f"List of surviving functions found, in order of ascending error rate {final_functions}")
+    print(f"The best function was {str(best_function)}")
+    print(f"With an error rate of{lowest_difference}")
