@@ -200,10 +200,15 @@ def generate_functions(num):
         functions.append(m)
     return functions
 
+def num_children(n): #helper function for mutate_functions
+    table = [35, 20, 20, 19, 19, 18, 18, 17, 17, 16, 16, 15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 9, 8, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 1, 1, 1]
+    return table[n]
+
 def mutate_functions(functions):
     mutated_functions = []
-    for f in functions:
-        for i in range(10):
-            mutated_functions.append(mutate(f))
-        #mutated_functions.append(random_expression(4))
+    for i in range(len(functions) - 1):
+        for j in range(num_children(i)-2):
+            mutated_functions.append(mutate(functions[i]))
+        mutated_functions.append(functions[i])
+        mutated_functions.append(random_expression(depth = 3))
     return mutated_functions
