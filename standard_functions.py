@@ -1,8 +1,6 @@
 import math as maths
 
-def sin(x):
-    return maths.sin(x)
-def cos(x):
-    return maths.cos(x)
-
-maths.sinh(5)
+def log(x):
+    if x == 0:
+        return 100000
+    return maths.log(abs(x))
