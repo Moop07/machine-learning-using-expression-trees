@@ -1,5 +1,6 @@
 import random
 import math as maths
+from standard_functions import log
 
 # === Expression node Classes ===
 
@@ -73,6 +74,10 @@ def simplify(expr):
                     return constant(maths.cos(operand.value))
                 elif expr.op == "-":
                     return constant(-operand.value)
+                elif expr.op == "maths.exp":
+                    return constant(2.718281828 ** operand.value)
+                elif expr.op == "log":
+                    return constant(log(abs(operand.value)))
             except Exception:
                 pass
         return unary_op(expr.op, operand)
@@ -132,8 +137,8 @@ def random_expression(depth=2):
         else:
             return constant(random.randint(1, 9))
 
-    op = random.choice(["+", "-", "*", "/", "maths.sin", "maths.cos"])
-    if op in ["maths.sin", "maths.cos"]:
+    op = random.choice(["+", "-", "*", "/", "maths.sin", "maths.cos", "maths.exp", "log"])
+    if op in ["maths.sin", "maths.cos", "maths.exp", "log"]:
         expr = unary_op(op, random_expression(depth - 1))
     else:
         expr = binary_op(op, random_expression(depth - 1), random_expression(depth - 1))
@@ -160,7 +165,7 @@ def mutate(expr):
     # --- Local mutations depending on node type ---
     if isinstance(expr, constant):
         # tweak value slightly
-        expr.value += random.choice([-1, 1])
+        expr.value += random.randint(-100, 100)/100
 
     elif isinstance(expr, variable):
         # sometimes wrap variable in unary op
@@ -204,11 +209,13 @@ def num_children(n): #helper function for mutate_functions
     table = [35, 20, 20, 19, 19, 18, 18, 17, 17, 16, 16, 15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 9, 8, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 1, 1, 1]
     return table[n]
 
-def mutate_functions(functions):
+def mutate_functions(functions, migration = 0.1):
     mutated_functions = []
-    for i in range(len(functions) - 1):
-        for j in range(num_children(i)-2):
-            mutated_functions.append(mutate(functions[i]))
+    population_size = len(functions)
+    for i in range(len(functions) - 1 - int(len(functions) * migration)):
+        mutated_functions.append(mutate(functions[i]))
         mutated_functions.append(functions[i])
+        mutated_functions.append(random_expression(depth = 3))
+    for j in range(int(len(functions) * migration)):
         mutated_functions.append(random_expression(depth = 3))
     return mutated_functions
