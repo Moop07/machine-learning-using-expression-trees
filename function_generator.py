@@ -213,9 +213,8 @@ def mutate_functions(functions, migration = 0.1):
     mutated_functions = []
     population_size = len(functions)
     for i in range(len(functions) - 1 - int(len(functions) * migration)):
-        mutated_functions.append(mutate(functions[i]))
         mutated_functions.append(functions[i])
-        mutated_functions.append(random_expression(depth = 3))
+        mutated_functions.append((mutate(functions[i][0]), None))
     for j in range(int(len(functions) * migration)):
-        mutated_functions.append(random_expression(depth = 3))
+        mutated_functions.append((random_expression(depth = 3), None))
     return mutated_functions
